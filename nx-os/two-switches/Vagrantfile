@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+
+    # Deploy 2 Nodes with a link between them
+
+    config.vm.define "n9k1" do |node|
+        node.vm.box =  "n9000v/7.0.3.I5.2"
+
+        # eth1/0/1 connected to link1, 
+        # auto-config not supported.
+        node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
+    end
+
+    config.vm.define "n9k2" do |node|
+        node.vm.box =  "n9000v/7.0.3.I5.2"
+
+        # eth1/0/1 connected to link1, 
+        # auto-config not supported.
+        node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
+    end
+end
