@@ -7,21 +7,42 @@
 # you're doing.
 Vagrant.configure("2") do |config|
 
-    # Deploy 2 Nodes with a link between them
+    # Deploy 2 Nodes with two links between them
 
     config.vm.define "n9k1" do |node|
-        node.vm.box =  "n9000v/7.0.3.I5.2"
+        node.vm.box = "n9000v"
+        node.vm.base_mac = "0800276CEEAA"
 
-        # eth1/0/1 connected to link1, 
-        # auto-config not supported.
-        node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
+        # eth1/1 connected to vboxnet1, auto-config not supported.
+        node.vm.network :private_network, virtualbox__intnet: "nxeth1",
+          auto_config: false, mac: "0800276CEE15"
+
+        # eth1/2 connected to vboxnet2, auto-config not supported.
+        node.vm.network :private_network, virtualbox__intnet: "nxeth2",
+          auto_config: false, mac: "0800276CEE16"
+
+        node.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+            v.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+        end
     end
 
     config.vm.define "n9k2" do |node|
-        node.vm.box =  "n9000v/7.0.3.I5.2"
+        node.vm.box = "n9000v"
+        node.vm.base_mac = "0800276DEEAA"
 
-        # eth1/0/1 connected to link1, 
-        # auto-config not supported.
-        node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
+        # eth1/1 connected to vboxnet1, auto-config not supported.
+        node.vm.network :private_network, virtualbox__intnet: "nxeth1",
+          auto_config: false, mac: "0800276DEE15"
+
+        # eth1/2 connected to vboxnet2, auto-config not supported.
+        node.vm.network :private_network, virtualbox__intnet: "nxeth2",
+          auto_config: false, mac: "0800276DEE16"
+
+        node.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+            v.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+        end
     end
+
 end
