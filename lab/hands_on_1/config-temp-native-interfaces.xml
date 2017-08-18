@@ -1,0 +1,24 @@
+<config>
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+    <interface>
+    <{int_type} >
+        <name>{int_id}</name>
+        <description>{int_desc}</description>
+        <ip>
+            <address>
+                <primary>
+                    <address>{ip_address}</address>
+                    <mask>{subnet_mask}</mask>
+                </primary>
+            </address>
+        </ip>
+        <mop>
+            <enabled>false</enabled>
+        </mop>
+        <negotiation xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-ethernet">
+            <auto>true</auto>
+        </negotiation>
+    </{int_type}>
+    </interface>
+    </native>
+</config>
