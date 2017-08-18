@@ -1,0 +1,75 @@
+##############################################################
+# Learning Series: Network Programmability Basics
+# Module: NetDevOps
+# Lesson: Ansible Part 2: Using Ansible for Network Configuration
+# Author: Hank Preston <hapresto@cisco.com>
+# 
+# example1.yaml
+# Illustrate the following concepts:
+# - Basic Playbook Structure for NX-OS Modules
+##############################################################
+---
+- name: Provision IOS XE Devices
+  hosts: all
+  connection: local
+  
+  tasks: 
+    - name: Pause to complete boot
+      pause: 
+        seconds: 5
+
+    - name: Configure NETCONF and RESTCONF
+      ios_config: 
+        provider: 
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines: 
+          - netconf-yang
+          - netconf-yang cisco-odm polling-enable
+          - restconf
+          - ip http server
+          - ip http secure-server
+      register: output_interfaces 
+      
+    - name: Pause for NETCONF/RESTCONF to start
+      pause: 
+        seconds: 45
+
+#    Ansible 2.4 version of the NETCONF module supports reading in NETCONF Files
+#    - name: "Generate NETCONF config"
+#      with_items: "{{interfaces}}"
+#      template: 
+#        src: "netconf_interface_template.j2"
+#        dest: "./{{inventory_hostname}}-{{item.interface_type}}{{item.interface_id}}.xml"
+      
+    - name: Configure Interfaces
+      with_items: "{{interfaces}}"
+      netconf_config: 
+        host: "{{mgmt_ip}}"
+        port: "{{netconf_port}}"
+        hostkey_verify: false
+        username: "{{username}}"
+        password: "{{password}}" 
+        xml: |
+            <config>
+              <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+                <interface>
+                  <name>{{item.interface_type}}{{item.interface_id}}</name>
+                  <description>{{item.description}}</description>
+                  <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
+                  <enabled>true</enabled>
+                  <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+                    <address>
+                      <ip>{{item.ip_address}}</ip>
+                      <netmask>{{item.subnet_mask}}</netmask>
+                    </address>
+                  </ipv4>
+                </interface>
+              </interfaces>
+            </config>
+        #Ansible 2.4 version of the NETCONF module supports reading in NETCONF Files
+        #src: "./{{inventory_hostname}}-{{item.interface_type}}{{item.interface_id}}.xml"
+
+
