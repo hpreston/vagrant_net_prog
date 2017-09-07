@@ -1,0 +1,4 @@
+venv/
+*.pyc
+created_boxes/
+Vagrantfile
