@@ -10,17 +10,17 @@ Vagrant.configure("2") do |config|
     # Deploy 2 Nodes with a link between them
 
     config.vm.define "n9k1" do |node|
-        node.vm.box =  "n9000v/7.0.3.I5.2"
+        node.vm.box =  "nxos/7.0.3.I7.1"
 
-        # eth1/0/1 connected to link1, 
+        # eth1/0/1 connected to link1,
         # auto-config not supported.
         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
     end
 
     config.vm.define "n9k2" do |node|
-        node.vm.box =  "n9000v/7.0.3.I5.2"
+        node.vm.box =  "nxos/7.0.3.I7.1"
 
-        # eth1/0/1 connected to link1, 
+        # eth1/0/1 connected to link1,
         # auto-config not supported.
         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
     end
