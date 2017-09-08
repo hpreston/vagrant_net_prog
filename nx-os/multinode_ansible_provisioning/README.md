@@ -10,9 +10,9 @@ Assumes you already have Vagrant + VirtualBox installed and working.
 
 You will need a Nexus 9000 Vagrant Box.  You can quickly create your own using the instructions provided in the [box_building](../../box_building) folder of this repo.  
 
-### Ansible 2.2
+### Ansible
 
-For the provisioner to work, you'll need Ansbile installed.  Version 2.2 is suggested, though later versions may work.  
+For the provisioner to work, you'll need Ansible installed.  The example playbook uses modules that are available in 2.3+.  
 
 1. Setup Python Virtual Environment
 
@@ -82,6 +82,37 @@ Lo13                 172.22.3.1      protocol-up/link-up/admin-up
 Lo14                 172.22.4.1      protocol-up/link-up/admin-up
 Eth1/1               172.20.0.2      protocol-up/link-up/admin-up
 nxos2# exit
+```
+
+### Reprovisioning Switches with Ansible
+
+Should you make changes to the Ansible Playbooks and want to re-run it against the switches you can do so with `vagrant provision`.
+
+```bash
+$ vagrant provision
+
+# Abbreviated Sample Output
+==> nxos1: Running provisioner: ansible...
+    nxos1: Running ansible-playbook...
+
+PLAY [Provision NX-OS Devices] *************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [nxos1]
+
+TASK [Configure Interfaces] ****************************************************
+ok: [nxos1] => (item={u'prefix': 24, u'ip_address': u'172.21.1.1', u'name': u'Loopback11', u'desc': u'Sample Network Route Injection'})
+ok: [nxos1] => (item={u'prefix': 24, u'ip_address': u'172.21.2.1', u'name': u'Loopback12', u'desc': u'Sample Network Route Injection'})
+ok: [nxos1] => (item={u'prefix': 24, u'ip_address': u'172.21.3.1', u'name': u'Loopback13', u'desc': u'Sample Network Route Injection'})
+ok: [nxos1] => (item={u'prefix': 24, u'ip_address': u'172.21.4.1', u'name': u'Loopback14', u'desc': u'Sample Network Route Injection'})
+ok: [nxos1] => (item={u'prefix': 24, u'ip_address': u'172.20.0.1', u'name': u'Ethernet1/1', u'desc': u'Link to other switch'})
+
+PLAY RECAP *********************************************************************
+nxos1                      : ok=7    changed=1    unreachable=0    failed=0
+
+.
+.
+.
 ```
 
 ## Caveats and Known Issues
