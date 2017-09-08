@@ -1,0 +1,62 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+    config.vm.define "nxos1" do |node|
+        node.vm.box =  "nxos/7.0.3.I7.1"
+
+        # n9000v defaults to 8G RAM, but only needs 4G
+        config.vm.provider "virtualbox" do |vb|
+          # Customize the amount of memory on the VM:
+          vb.memory = "4096"
+          # Disconnect serial port to avoid conflict
+          vb.customize ['modifyvm', :id, '--uart1', '0x3F8', 4, '--uartmode1', 'disconnected']
+          vb.customize ['modifyvm', :id, '--uart2', '0x2F8', 3, '--uartmode2', 'disconnected']
+        end
+
+        # eth1/1 connected to link2,
+        node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
+
+        # Explicity set SSH Port to avoid conflict and for provisioning
+        config.vm.network :forwarded_port, guest: 22, host: 3122, id: 'ssh', auto_correct: true
+
+        # Forward API Ports
+        config.vm.network :forwarded_port, guest: 80, host: 3180, id: 'http', auto_correct: true
+        config.vm.network :forwarded_port, guest: 443, host: 3143, id: 'https', auto_correct: true
+        config.vm.network :forwarded_port, guest: 830, host: 3130, id: 'netconf', auto_correct: true
+    end
+
+    config.vm.define "nxos2" do |node|
+        node.vm.box =  "nxos/7.0.3.I7.1"
+
+        # n9000v defaults to 8G RAM, but only needs 4G
+        config.vm.provider "virtualbox" do |vb|
+          # Customize the amount of memory on the VM:
+          vb.memory = "4096"
+          # Disconnect serial port to avoid conflict
+          vb.customize ['modifyvm', :id, '--uart1', '0x3F8', 4, '--uartmode1', 'disconnected']
+          vb.customize ['modifyvm', :id, '--uart2', '0x2F8', 3, '--uartmode2', 'disconnected']
+        end
+
+        # eth1/1 connected to link2,
+        node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
+
+        # Explicity set SSH Port to avoid conflict and for provisioning
+        config.vm.network :forwarded_port, guest: 22, host: 3222, id: 'ssh', auto_correct: true
+
+        # Forward API Ports
+        config.vm.network :forwarded_port, guest: 80, host: 3280, id: 'http', auto_correct: true
+        config.vm.network :forwarded_port, guest: 443, host: 3243, id: 'https', auto_correct: true
+        config.vm.network :forwarded_port, guest: 830, host: 3230, id: 'netconf', auto_correct: true
+    end
+
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible_provision.yaml"
+      ansible.inventory_path = "./hosts"
+      ansible.raw_arguments = ["--connection=paramiko"]
+    end
+end

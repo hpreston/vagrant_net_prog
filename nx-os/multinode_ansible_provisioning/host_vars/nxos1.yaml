@@ -1,0 +1,34 @@
+---
+mgmt_ip: 127.0.0.1
+ssh_port: 3122
+http_port: 3180
+https_port: 3143
+netconf_port: 3130
+username: vagrant
+password: vagrant
+interfaces:
+    - name: Loopback11
+      desc: Sample Network Route Injection
+      ip_address: 172.21.1.1
+      prefix: 24
+    - name: Loopback12
+      desc: Sample Network Route Injection
+      ip_address: 172.21.2.1
+      prefix: 24
+    - name: Loopback13
+      desc: Sample Network Route Injection
+      ip_address: 172.21.3.1
+      prefix: 24
+    - name: Loopback14
+      desc: Sample Network Route Injection
+      ip_address: 172.21.4.1
+      prefix: 24
+    - name: Ethernet1/1
+      desc: Link to other switch
+      ip_address: 172.20.0.1
+      prefix: 24
+mac_addresses:
+    - interface: Ethernet1/1
+      address: 0000.0000.1001
+    - interface: Ethernet1/2
+      address: 0000.0000.1002
