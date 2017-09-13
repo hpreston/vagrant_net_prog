@@ -4,12 +4,12 @@ Author: Rich Wellum (richwellum@gmail.com)
     Adapted and enhanced (fwiw) for use with NX-OS
     by Hank Preston (hapresto@cisco.com)
 
-This is a tool to take an NX-OS Base Virtual Box image from CCO and create a 
-new box that has been bootstrapped for use with Vagrant.  
+This is a tool to take an NX-OS Base Virtual Box image from CCO and create a
+new box that has been bootstrapped for use with Vagrant.
 
-- Initial configuration complete 
-- Mgmt Configured for DHCP 
-- vagrant account created with password vagrant and pub SSH Key 
+- Initial configuration complete
+- Mgmt Configured for DHCP
+- vagrant account created with password vagrant and pub SSH Key
 
 Tested with nxosv-final.7.0.3.I7.1.box
             nxosv-final.7.0.3.I6.1.box
@@ -29,7 +29,7 @@ pip install pexpect
 
 Full Description:
 
-Takes an NX-OS Source Box downloaded locally and completes the setup and base configuration and outputs 
+Takes an NX-OS Source Box downloaded locally and completes the setup and base configuration and outputs
 an updated VirtualBox Vagrant box.
 
 Adds an embedded Vagrantfile, that will be included in
@@ -54,8 +54,8 @@ Vagrantfiles for more advanced multi-node topologies.
   . Closes the VM down, once configured.
 
 The resultant box image, will come up fully networked and ready for use
-with NX-API.  Other programmability features of NX-OS can be enabled 
-manually or through provisioning with Ansible.  
+with NX-API.  Other programmability features of NX-OS can be enabled
+manually or through provisioning with Ansible.
 
 NOTE: If more than one interface in the resulting Vagrant box is required
       then those additional interfaces need to be added in the actual
@@ -85,7 +85,7 @@ BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 # Telnet ports used to access IOS XE via socat
 CONSOLE_PORT = 65000
-CONSOLE_SOCKET = "/tmp/test" 
+CONSOLE_SOCKET = "/tmp/test"
 
 logger = logging.getLogger(__name__)
 
@@ -197,7 +197,7 @@ def pause_to_debug():
     # end
 
 
-def cleanup_box(): 
+def cleanup_box():
     """
     Destroy Running Box.
     """
@@ -230,14 +230,14 @@ def configure_nx(verbose=False, wait=True):
             cmd = list((cmd,))
         for c in cmd:
             send_line(c)
-        if expect_prompt: 
+        if expect_prompt:
             child.expect(PROMPT)
-    
+
 
     try:
         #child = pexpect.spawn("socat TCP:%s:%s -,raw,echo=0,escape=0x1d" % (localhost, CONSOLE_PORT))
         child = pexpect.spawn("socat unix-connect:%s stdin" % (CONSOLE_SOCKET))
-        
+
         if verbose:
             child.logfile = open("tmp.log", "w")
 
@@ -250,17 +250,17 @@ def configure_nx(verbose=False, wait=True):
             logger.warn(
                 'Logging into Vagrant Virtualbox and configuring NX-OS')
 
-        # Abort POAP 
+        # Abort POAP
         logger.warn("Aborting POAP")
         send_cmd("y", expect_prompt=False)
         time.sleep(1)
-        
-        # Disable Secure Password Enforcement 
+
+        # Disable Secure Password Enforcement
         logger.warn("Disable Secure Password")
         send_cmd("n", expect_prompt=False)
         time.sleep(1)
 
-        # Set admin password 
+        # Set admin password
         logger.warn("Setting Admin Password")
         if (wait):
             child.expect(r'Enter the password for', child.timeout)
@@ -283,7 +283,7 @@ def configure_nx(verbose=False, wait=True):
         logger.warn("Disable Basic Sys Config")
         send_cmd("no", expect_prompt=False)
         time.sleep(10)
-        
+
         # Login as admin
         logger.warn("Logging in as admin")
         send_cmd("admin", expect_prompt=False)
@@ -291,13 +291,13 @@ def configure_nx(verbose=False, wait=True):
         send_cmd("admin", expect_prompt=False)
         time.sleep(1)
         send_cmd("term width 300")
-        
+
         # enable plus config mode
         logger.warn("Deploying Baseline configuration.")
         send_cmd("enable")
         send_cmd("conf t")
-        
-        # Perform basic Vagrant Configuration 
+
+        # Perform basic Vagrant Configuration
         send_cmd("hostname n9kv1")
         send_cmd("interface mgmt 0")
         send_cmd("ip address dhcp ")
@@ -306,37 +306,37 @@ def configure_nx(verbose=False, wait=True):
         send_cmd("username vagrant password vagrant role network-admin")
         send_cmd("username vagrant sshkey ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key")
 
-        # Enable Features 
+        # Enable Features
         send_cmd("feature nxapi")
-        
-        # Enable Guest Shell - needed because running with 4G Ram and not auto-installed 
+
+        # Enable Guest Shell - needed because running with 4G Ram and not auto-installed
         # Used to set boot variable correctly
         send_cmd("guestshell enable")
         time.sleep(1)
-        # wait for indication that guestshell is ready 
+        # wait for indication that guestshell is ready
         if (wait):
             child.expect(r"%VMAN-2-ACTIVATION_STATE: Successfully activated virtual service 'guestshell", child.timeout)
             logger.info('Guest Shell Enabled')
         time.sleep(5)
 
-        # Set Boot Variable 
+        # Set Boot Variable
         logger.warn("Setting boot image")
         send_cmd("guestshell run ls /bootflash/nxos*")
         boot_image = child.before.split("/")[4].strip()
         send_cmd("boot nxos bootflash:/{}".format(boot_image))
 
 
-        # Disable Guest Shell to save resources in base box 
+        # Disable Guest Shell to save resources in base box
         send_cmd("guestshell destroy", expect_prompt=False)
         time.sleep(1)
         send_cmd("y")
         time.sleep(1)
-        # wait for indication that guestshell is destroyed 
+        # wait for indication that guestshell is destroyed
         if (wait):
             child.expect(r"%VMAN-2-INSTALL_STATE: Successfully destroyed virtual service 'guestshell", child.timeout)
             logger.info('Guest Shell Destroyed')
-        
-        
+
+
         # done and save
         logger.warn("Finishing Config and Saving to Startup-Config")
         send_cmd("end")
@@ -346,26 +346,26 @@ def configure_nx(verbose=False, wait=True):
         logger.warn('Waiting 10 seconds...')
         time.sleep(10)
 
-        
+
     except pexpect.TIMEOUT:
         raise pexpect.TIMEOUT('Timeout (%s) exceeded in read().' % str(child.timeout))
 
 
-def create_Vagrantfile(boxname, vmmemory="4096"): 
+def create_Vagrantfile(boxname, vmmemory="4096"):
     """
-    Create a Basic Vagrantfile.  
+    Create a Basic Vagrantfile.
     """
-    
+
     template = """# -*- mode: ruby -*-\n# vi: set ft=ruby :
                   Vagrant.configure("2") do |config|
                     config.vm.box = "{boxname}"
                     config.vm.synced_folder '.', '/vagrant', disabled: true
                     config.ssh.insert_key = false
-                    config.vm.boot_timeout = 400  
+                    config.vm.boot_timeout = 400
                     config.vm.guest = :other
                     # turn off the check if the plugin is installed
                     if Vagrant.has_plugin?("vagrant-vbguest")
-                      config.vbguest.auto_update = false  
+                      config.vbguest.auto_update = false
                     end
                     config.vm.provider "virtualbox" do |vb|
                        vb.memory = "{vmmemory}"
@@ -380,14 +380,14 @@ def create_Vagrantfile(boxname, vmmemory="4096"):
         f.write(vagrantfile_contents)
 
 
-def box_add(boxname, boxpath): 
+def box_add(boxname, boxpath):
     """
     Add Box to Vagrant Inventory.
     """
     logger.debug("Adding box %s to Vagrant." % (boxname))
     run(["vagrant", "box", "add", "-f", boxname, boxpath])
-        
-def box_remove(boxname): 
+
+def box_remove(boxname):
     """
     Remove Box from Vagrant Inventory.
     """
@@ -395,12 +395,13 @@ def box_remove(boxname):
     run(["vagrant", "box", "remove", "-f", boxname])
 
 
-def vagrant_up(cont_on_error=False): 
+def vagrant_up(cont_on_error=False):
     """
     Bring Up Vagrant
     """
     logger.warn("Starting Vagrant Environment.")
     logger.warn("  Note: vagrant may generate an error, that is expected")
+    logger.warn("  Note: this step may take 3-5 minutes to complete.")
     run(["vagrant", "up"], cont_on_error=cont_on_error)
 
 
@@ -461,7 +462,7 @@ def main(argv):
     vmname_base = os.path.basename(os.getcwd()) + "_default_"
     version = box_name[box_name.find(".")+1:len(box_name)-4]
     output_box = "nxos_{}".format(version)
-    
+
     # if debug flag then set the logger to debug
     if args.debug:
         args.verbose = logging.DEBUG
@@ -505,36 +506,36 @@ def main(argv):
 #         logger.debug('Found and deleted previous %s', ova_out)
 
 
-    # Destroy any existing vagrant environment 
+    # Destroy any existing vagrant environment
     cleanup_box()
     logger.warn("  Note: An error may occur if the Vagrant environment isn't initialized, not problem")
 
-    # Create Vagrantfile 
+    # Create Vagrantfile
     create_Vagrantfile(box_name)
 
-    # Add Box to Vagrant Inventory 
+    # Add Box to Vagrant Inventory
     box_add(box_name, input_box)
 
-    # Bring up Environment 
+    # Bring up Environment
     vagrant_up(cont_on_error=True)
-    
-    # Determine VM Name from Virtual Box 
+
+    # Determine VM Name from Virtual Box
     vms_list_running = run(['VBoxManage', 'list', 'runningvms']).split("\n")
     possible_vms = [vm for vm in vms_list_running if vmname_base in vm]
-    if len(possible_vms) == 1: 
+    if len(possible_vms) == 1:
         # Extract just the VM Name from the output
         vmname = possible_vms[0].split()[0][1:len(possible_vms[0].split()[0])-2]
         logger.warn("Found VirtualBox VM: {}".format(vmname))
-    else: 
+    else:
         sys.exit("Could not determine the VM Name.")
-    
-    # Complete Startup 
+
+    # Complete Startup
     # Configure NX-OS
     # do print steps for logging set to DEBUG and INFO
     # DEBUG also prints the I/O with the device on the console
     # default is WARN
     configure_nx(args.verbose < logging.WARN)
-    
+
     # Good place to stop and take a look if --debug was entered
     if args.debug:
         pause_to_debug()
@@ -544,26 +545,39 @@ def main(argv):
     logger.warn('Powering down and generating new Vagrant VirtualBox')
     logger.warn('Waiting for machine to shutdown')
     run(["vagrant", "halt", "-f"])
-    
+
     # Add the embedded Vagrantfile
     vagrantfile_pathname = os.path.join(pathname, 'include', 'embedded_vagrantfile_nx')
-    
+
+    logger.warn("Exporting new box file.  (may take 3 minutes or so)")
     run(["vagrant", "package", "--vagrantfile", vagrantfile_pathname, "--output", box_out])
     logger.warn('New Vagrant Box Created: %s', box_out)
 
     # Destroy original Source Box
+    logger.warn("Cleaning up build resources.")
     cleanup_box()
     box_remove(box_name)
+
+    # Delete Vagrantfile used to build box
+    os.remove("Vagrantfile")
 
     logger.warn('Completed!')
     logger.warn(" ")
 
     logger.warn('Add box to system:')
     logger.warn('  vagrant box add --name nxos/{version} {boxout} --force'.format(version=version, boxout=box_out))
-    logger.warn('Initialize environment:')
+    logger.warn(" ")
+    logger.warn('Use your new box:')
+    logger.warn("Make project directory: ")
+    logger.warn("  mkdir my_project ")
+    logger.warn("  cd my_project")
+    logger.warn('Initialize Project Vagrant Environment:')
     logger.warn('  vagrant init nxos/{version}'.format(version=version))
     logger.warn('Bring up box:')
     logger.warn('  vagrant up')
+    logger.warn('')
+    logger.warn("Note: Due to a shell error, 'vagrant up' will error the "\
+                "first time launching a box.  Run 'vagrant up' to complete")
 
     logger.warn('Note:')
     logger.warn(
