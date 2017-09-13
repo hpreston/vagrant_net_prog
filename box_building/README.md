@@ -1,23 +1,23 @@
-# Vagrant Box Building 
+# Vagrant Box Building
 
 Here you will find a set of utilities and scripts designed to help simplify the creation of [Vagrant Boxes](https://www.vagrantup.com/docs/boxes.html) of network devices for use with Virtual Box.  Developers can then quickly initialize and `vagrant up` an instance of a network element to build and test code and APIs.  
 
-### Acknowledgments 
+### Acknowledgments
 
 Like many great Open Source projects, this project is built open the great work of others.  Specifically these scripts build on the foundation work available at [https://github.com/ios-xr/iosxrv-x64-vbox.git](https://github.com/ios-xr/iosxrv-x64-vbox.git)
 
-## Getting Started 
+## Getting Started
 
-#### Platform Support: 
+#### Platform Support:
 These utilities are perpetually in development/beta and currently are being built and tested on MacOS.  Testing and supporting other platforms is planned, and I'd love to see contributions in this area.  
 
 1. Clone the repo and enter the directory.  
-    
+
     ```bash
-    git clone https://github.com/hpreston/vagrant_net_prog 
-    cd vagrant_net_prog/box_building 
+    git clone https://github.com/hpreston/vagrant_net_prog
+    cd vagrant_net_prog/box_building
     ```
-    
+
 1. Install [VirtualBox](https://www.virtualbox.org/), [Vagrant](https://www.vagrantup.com), and [socat](http://www.dest-unreach.org/socat/doc/socat.html).  There are several methods available, but one very easy way is using [Homebrew](https://brew.sh) for MacOS.  
 
     ```bash
@@ -26,18 +26,18 @@ These utilities are perpetually in development/beta and currently are being buil
     brew cask install vagrant
     ```
 
-1. Install [pexpect](https://pypi.org/project/pexpect/) for Python 
+1. Install [pexpect](https://pypi.org/project/pexpect/) for Python
 
-    ```bash 
+    ```bash
     pip install -r requirements.txt
     ```
 
 1. Continue with device specific steps.
 
-## Supported Devices 
+## Supported Devices
 
-* [Cisco Nexus 9000v](#cisco-nexus-9000v) - Running the same Open NX-OS available on Nexus 9000 and 3000 platforms, the 9000v is a great platform for building and testing scripts and code for data center automation. 
-* Cisco CSR 1000v *(Coming Soon)* - The CSR runs IOS XE, just like Cisco's Catalyst Switches and many routing platforms (such as ISR, ASR 1K, etc), and is a great platform for experimenting with features like Model Driven Programmability, Day Zero Technologies and Application Hosting. 
+* [Cisco Nexus 9000v](#cisco-nexus-9000v) - Running the same Open NX-OS available on Nexus 9000 and 3000 platforms, the 9000v is a great platform for building and testing scripts and code for data center automation.
+* Cisco CSR 1000v *(Coming Soon)* - The CSR runs IOS XE, just like Cisco's Catalyst Switches and many routing platforms (such as ISR, ASR 1K, etc), and is a great platform for experimenting with features like Model Driven Programmability, Day Zero Technologies and Application Hosting.
 * Cisco IOS XRv *(Coming Soon)* - Running the same IOS XR code available on NCS and ASR 9K platforms, the XRv enables developers a resource for automating service provider networks.  
 
 # Cisco Nexus 9000v
@@ -46,17 +46,17 @@ Cisco publishes a Vagrant Box for the Nexus 9000v on CCO for each release, howev
 
 The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial configuration of the 9000v, deploys a basic configuration for management and API access, and adds the typical Vagrant user account and SSH key making it ready for usage for developers.  
 
-## Building a Nexus 9000v Box 
+## Building a Nexus 9000v Box
 
 1. Download the source Nexus 9000v Vagrant Box from [Cisco.com](https://software.cisco.com/portal/pub/download/portal/select.html?&mdfid=286312239&softwareid=282088129).  You will need to have an account with Cisco, but no specific entitlement is requried to download the software.  
 
     ![](readme_resources/n9kv_cco.png)
-    
+
 1. Generate the configured Vagrant Box (VirtualBox) by calling the script and pointing it to the downloaded source box you downloaded.  The script will provide feedback of each step and provide feedback for how to complete at the end.  
 
     ```bash
     python nxosv_vbox_prep.py ~/Downloads/nxosv-final.7.0.3.I6.1.box
-    
+
     ==> Check whether "socat" is installed
     ==>   Note: An error may occur if the Vagrant environment isn't initialized, not problem
     ==> Creating Vagrantfile
@@ -78,8 +78,8 @@ The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial conf
     ==> Powering down and generating new Vagrant VirtualBox
     ==> Waiting for machine to shutdown
     ==> New Vagrant Box Created: box_building/created_boxes/nxos_7.0.3.I6.1/nxos_7.0.3.I6.1.box
-    ==> Completed! 
-    ==> 
+    ==> Completed!
+    ==>
     ==> Add box to system:
     ==>   vagrant box add --name nxos/7.0.3.I6.1 box_building/created_boxes/nxos_7.0.3.I6.1/nxos_7.0.3.I6.1.box --force
     ==> Initialize environment:
@@ -89,26 +89,37 @@ The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial conf
     ==> Note:
     ==>   Both the NX-OS SSH and NX-API username and password is vagrant/vagrant
     ```
-    
+
 1. Add the newly created box to your local Vagrant inventory.  ***The script ends with the exact command to use based on your machine, but here is an example for reference.***
 
     ```bash    
-    vagrant box add --name type/version path_to_box.box --force 
+    vagrant box add --name type/version path_to_box.box --force
     ```
-    
-1. Initialize a new Vagrantfile using the new box.  ***The script ends with the exact command to use based on your machine, but here is an example for reference.***
+
+# Using Your New Box!
+
+With your new box created, you can now get started using it in your own projects.  
+
+1. Create a directory as the base for your project.  This directory will store your Vagrantfile (the configuration of your local development instance) as well as any code, notes, playbooks, etc you build.  
+    * Note: Vagrant only supports a single environment definition or `Vagrantfile` in a directory.  
+
+  ```bash
+  mkdir my_project
+  ```
+
+1. Initialize a new Vagrantfile using the new box.  ***Each build  script ends with the exact command to use based on your machine, but here is an example for reference.***
 
     ```bash
     vagrant init type/version
     ```
 
-1. Start your environment. 
+1. Start your environment.
 
     ```bash
     vagrant up
     ```
-    
-    * **Note: `vagrant up` for the Nexus 9000v will likely end with an error similar to the below.  This is expected and we are working on resolving the error.  The switch has likely booted correctly and you can continue.**
+
+    * **Note: `vagrant up` for the Nexus 9000v will likely end with an error similar to the below.  This is expected and we are working on resolving the error.  Simply run `vagrant up` again until you get the success message.**
 
         ```bash
         The configured shell (config.ssh.shell) is invalid and unable
@@ -118,11 +129,11 @@ The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial conf
         executable by the SSH user.        
         ```     
 
-1. Log into your environment. 
+1. Log into your environment.
 
     ```bash
     $ vagrant ssh
-    
+
     ***************************************************************************
     *  Nexus 9000v is strictly limited to use for evaluation, demonstration   *
     *  and NX-OS education. Any use or disclosure, in whole or in part of     *
