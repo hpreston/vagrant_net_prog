@@ -105,6 +105,7 @@ With your new box created, you can now get started using it in your own projects
 
   ```bash
   mkdir my_project
+  cd my_project
   ```
 
 1. Initialize a new Vagrantfile using the new box.  ***Each build  script ends with the exact command to use based on your machine, but here is an example for reference.***
