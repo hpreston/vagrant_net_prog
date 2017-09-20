@@ -282,7 +282,11 @@ def configure_nx(verbose=False, wait=True):
         # Disable Basic System Configuration
         logger.warn("Disable Basic Sys Config")
         send_cmd("no", expect_prompt=False)
-        time.sleep(10)
+        # time.sleep(10)
+
+        # wait for indication next step is ready
+        if (wait):
+            child.expect(r'User Access Verification', child.timeout)
 
         # Login as admin
         logger.warn("Logging in as admin")
