@@ -27,10 +27,11 @@ These utilities are perpetually in development/beta and currently are being buil
     ```
 
 1. Install [pexpect](https://pypi.org/project/pexpect/) for Python
+    * **Note** Python 2.7 required currently
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+  ```bash
+  pip install -r requirements.txt
+  ```
 
 1. Continue with device specific steps.
 
