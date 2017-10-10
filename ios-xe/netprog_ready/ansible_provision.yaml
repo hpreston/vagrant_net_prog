@@ -19,64 +19,6 @@
       pause:
         seconds: 5
 
-    - name: Enable IOX
-      ios_config:
-        provider:
-          host: "{{mgmt_ip}}"
-          port: "{{ssh_port}}"
-          username: "{{username}}"
-          password: "{{password}}"
-        lines:
-          - iox
-
-    - name: Pause for IOX to start
-      pause:
-        seconds: 10
-
-    - name: VirtualPortGroup for Guest Shell Configure
-      ios_config:
-        provider:
-          host: "{{mgmt_ip}}"
-          port: "{{ssh_port}}"
-          username: "{{username}}"
-          password: "{{password}}"
-        lines:
-          - interface VirtualPortGroup 0
-          - ip add 192.168.35.1 255.255.255.0
-          - no shut
-          - interface VirtualPortGroup0
-          - ip nat inside
-          - interface GigabitEthernet1
-          - ip nat outside
-          - ip access-list standard NAT_ACL
-          - permit 192.168.0.0 0.0.255.255
-          - ip nat inside source list NAT_ACL interface GigabitEthernet1 overload
-
-    - name: Enable Guest Shell
-      ignore_errors: true
-      ios_command:
-        provider:
-          host: "{{mgmt_ip}}"
-          port: "{{ssh_port}}"
-          username: "{{username}}"
-          password: "{{password}}"
-          timeout: 60
-        commands:
-          - guestshell enable VirtualPortGroup 0 guest-ip 192.168.35.2 name-server 208.67.222.222
-
-    - name: Enable AAA Authentication
-      ios_config:
-        provider:
-          host: "{{mgmt_ip}}"
-          port: "{{ssh_port}}"
-          username: "{{username}}"
-          password: "{{password}}"
-        lines:
-          - aaa new-model
-          - aaa authentication login default local
-          - aaa authorization exec default local
-          - ip http authentication local
-
     - name: Configure NETCONF and RESTCONF
       ios_config:
         provider:
@@ -130,3 +72,38 @@
         #     </config>
         #Ansible 2.4 version of the NETCONF module supports reading in NETCONF Files
         src: "./{{inventory_hostname}}-{{item.interface_type}}{{item.interface_id}}.xml"
+
+    - name: Enable IOX
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - iox
+
+    - name: Pause for IOX to start
+      pause:
+        seconds: 10
+
+    - name: Configure Interfaces and NAT for Guest Shell
+      netconf_config:
+        host: "{{mgmt_ip}}"
+        port: "{{netconf_port}}"
+        hostkey_verify: false
+        username: "{{username}}"
+        password: "{{password}}"
+        src: "./guestshell_prep_template.xml"
+
+    - name: Enable Guest Shell
+      ignore_errors: true
+      ios_command:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+          timeout: 60
+        commands:
+          - guestshell enable VirtualPortGroup 0 guest-ip 192.168.35.2 name-server 208.67.222.222

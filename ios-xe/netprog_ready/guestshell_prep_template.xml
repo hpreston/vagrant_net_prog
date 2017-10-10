@@ -1,0 +1,87 @@
+<config>
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+    <ip>
+      <access-list>
+        <standard xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-acl">
+          <name>NAT_ACL</name>
+          <access-list-seq-rule>
+            <sequence>10</sequence>
+            <permit>
+              <std-ace>
+                <ipv4-prefix>192.168.0.0</ipv4-prefix>
+                <mask>0.0.255.255</mask>
+              </std-ace>
+            </permit>
+          </access-list-seq-rule>
+        </standard>
+      </access-list>
+      <http xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-http">
+        <authentication>
+          <local/>
+        </authentication>
+        <server>true</server>
+        <secure-server>true</secure-server>
+        <client>
+          <source-interface>GigabitEthernet1</source-interface>
+        </client>
+      </http>
+      <nat xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-nat">
+        <inside>
+          <source>
+            <list>
+              <id>NAT_ACL</id>
+              <interface>
+                <GigabitEthernet>1</GigabitEthernet>
+              </interface>
+              <overload/>
+            </list>
+          </source>
+        </inside>
+      </nat>
+    </ip>
+    <interface>
+      <GigabitEthernet>
+        <name>1</name>
+        <ip>
+          <address>
+            <dhcp/>
+          </address>
+          <nat xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-nat">
+            <outside/>
+          </nat>
+        </ip>
+      </GigabitEthernet>
+      <VirtualPortGroup>
+        <name>0</name>
+        <ip>
+          <address>
+            <primary>
+              <address>192.168.35.1</address>
+              <mask>255.255.255.0</mask>
+            </primary>
+          </address>
+        </ip>
+      </VirtualPortGroup>
+    </interface>
+    <aaa>
+      <new-model xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-aaa"/>
+      <authentication xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-aaa">
+        <login>
+          <name>default</name>
+          <a1>
+            <local/>
+          </a1>
+        </login>
+      </authentication>
+      <authorization xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-aaa">
+        <exec>
+          <name>default</name>
+          <a1>
+            <local/>
+          </a1>
+        </exec>
+      </authorization>
+      <session-id xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-aaa">common</session-id>
+    </aaa>
+  </native>
+</config>
