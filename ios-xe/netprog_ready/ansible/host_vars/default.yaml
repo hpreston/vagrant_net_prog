@@ -4,7 +4,7 @@ netconf_port: 2223
 ssh_port: 2222
 username: vagrant
 password: vagrant
-interfaces: 
+interfaces:
   - interface_type: GigabitEthernet
     interface_id: 2
     description: Link 2 - Configured by Ansible with Vagrant

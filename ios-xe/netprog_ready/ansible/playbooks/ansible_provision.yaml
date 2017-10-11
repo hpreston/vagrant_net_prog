@@ -93,7 +93,7 @@
         hostkey_verify: false
         username: "{{username}}"
         password: "{{password}}"
-        src: "./guestshell_prep_template.xml"
+        src: "guestshell_prep_template.xml"
 
     - name: Enable Guest Shell
       ignore_errors: true
