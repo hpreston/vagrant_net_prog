@@ -1,12 +1,12 @@
 ##############################################################
-# Learning Series: Network Programmability Basics
-# Module: NetDevOps
-# Lesson: Ansible Part 2: Using Ansible for Network Configuration
+# Sample: Vagrant for IOS XE Network Programmability Development
 # Author: Hank Preston <hapresto@cisco.com>
 #
-# example1.yaml
+# ansible_provision.yaml
 # Illustrate the following concepts:
-# - Basic Playbook Structure for NX-OS Modules
+# - Provision an IOS XE Device through Ansible
+# - Enable NETCONF/RESTCONF APIs and use them
+# - Enable Guest Shell
 ##############################################################
 ---
 - name: Provision IOS XE Devices
@@ -32,7 +32,6 @@
           - restconf
           - ip http server
           - ip http secure-server
-      register: output_interfaces
 
     - name: Pause for NETCONF/RESTCONF to start
       pause:
