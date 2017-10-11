@@ -1,0 +1,111 @@
+##############################################################
+# Sample: Vagrant for IOS XE Network Programmability Development
+# Author: Hank Preston <hapresto@cisco.com>
+#
+# bootstap.yaml
+# Illustrate the following concepts:
+# - Provision an IOS XE Device through Ansible
+# - Configure common global settings
+#   - NTP, SNMP, Syslog, Domain, VTY
+# - Illustrate CLI based Configuration
+##############################################################
+---
+- name: Baseline Configure IOS XE Device
+  hosts: all
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Setup NTP Configuration
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - ntp source {{ mgmt_interface }}
+
+    - name: Setup NTP Servers
+      with_items: "{{ global_ntp.servers }}"
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - ntp server {{ item }}
+
+    - name: Setup SNMP Configuration
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - snmp-server community {{ global_snmp.read_community }} ro
+          - snmp-server community {{ global_snmp.write_community }} rw
+          - snmp-server enable traps snmp linkdown linkup
+          - snmp-server chassis-id {{ snmp.chassis_id }}
+          - snmp-server contact {{ snmp.contact }}
+          - snmp-server location {{ snmp.location }}
+          - snmp-server source-interface traps {{ mgmt_interface }}
+          - snmp-server source-interface informs {{ mgmt_interface }}
+
+    - name: Setup SNMP Hosts
+      with_items: "{{ global_snmp.servers }}"
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - snmp-server host {{ item }} version 2c {{ global_snmp.read_community }}
+
+    - name: Setup Syslog Configuration
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - logging on
+          - logging source-interface {{ mgmt_interface }}
+          - logging origin-id ip
+
+    - name: Setup Syslog Hosts
+      with_items: "{{ global_syslog.servers }}"
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - logging host {{ item }}
+
+    - name: Setup Domain Configuration
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - ip domain-lookup source-interface {{ mgmt_interface }}
+          - ip domain-name {{ global_dns.domain_name }}
+
+    - name: Setup Domain Name Servers
+      with_items: "{{ global_dns.servers }}"
+      ios_config:
+        provider:
+          host: "{{mgmt_ip}}"
+          port: "{{ssh_port}}"
+          username: "{{username}}"
+          password: "{{password}}"
+        lines:
+          - ip name-server {{ item }}
