@@ -3,6 +3,7 @@
 Author: Rich Wellum (richwellum@gmail.com)
     Adapted and enhanced (fwiw) for use with IOS XE
     by Ralph Schmieder (rschmied@cisco.com)
+    Additional updates by Hank Preston (hank.preston@gmail.com)
 
 This is a tool to take an IOS XE Virtual Machine ISO image and convert it into
 a Vagrant box (using VirtualBox), fully networked and ready NETCONF/RESTCONF.
@@ -437,7 +438,11 @@ def main(argv):
     logger.info('Virtual Box Manager Version: %s', version)
 
     # Variables
-    version = input_iso[input_iso.find(".")+1:len(input_iso)-4]
+    image_version = input_iso[input_iso.find(".")+1:len(input_iso)-4]
+    ver_parts = image_version.split(".")
+    ver_major = int(ver_parts[0])
+    ver_minor = int(ver_parts[1])
+    image_version_num = float("{major}.{minor}".format(major = ver_major, minor = ver_minor))
 
     # Set up paths
     base_dir = os.path.join(os.getcwd(), 'created_boxes')
@@ -504,7 +509,10 @@ def main(argv):
     # added either in the vagrant file template or in the actual file inside the
     # box (after vagrant init).
     logger.debug('Create NICs')
-    run(['VBoxManage', 'modifyvm', vmname, '--nic1', 'nat', '--nictype1', '82540EM'])
+    if image_version_num >= 16.7:
+        run(['VBoxManage', 'modifyvm', vmname, '--nic1', 'nat', '--nictype1', 'virtio'])
+    else:
+        run(['VBoxManage', 'modifyvm', vmname, '--nic1', 'nat', '--nictype1', '82540EM'])
     run(['VBoxManage', 'modifyvm', vmname, '--cableconnected1', 'on'])
 
     # Add Serial ports
@@ -619,8 +627,12 @@ def main(argv):
     logger.warn('Building Vagrant box')
 
     # Add the embedded Vagrantfile
-    vagrantfile_pathname = os.path.join(
-        pathname, 'include', 'embedded_vagrantfile_xe')
+    if image_version_num >= 16.7:
+        vagrantfile_pathname = os.path.join(
+            pathname, 'include', 'embedded_vagrantfile_xe_virtio')
+    else:
+        vagrantfile_pathname = os.path.join(
+            pathname, 'include', 'embedded_vagrantfile_xe')
 
     run(['vagrant', 'package', '--base', vmname, '--vagrantfile',
          vagrantfile_pathname, '--output', box_out])
@@ -636,9 +648,9 @@ def main(argv):
     cleanup_vmname(vmname, vbox)
 
     logger.warn('Add box to system:')
-    logger.warn('  vagrant box add --name iosxe/{version} {boxout} --force'.format(version=version, boxout=box_out))
+    logger.warn('  vagrant box add --name iosxe/{version} {boxout} --force'.format(version=image_version, boxout=box_out))
     logger.warn('Initialize environment:')
-    logger.warn('  vagrant init iosxe/{version}'.format(version=version))
+    logger.warn('  vagrant init iosxe/{version}'.format(version=image_version))
     logger.warn('Bring up box:')
     logger.warn('  vagrant up')
 

@@ -7,7 +7,6 @@ This is an repository with some samples and details on leveraging Vagrant for Ne
 * [box\_building](box_building): Resources to build Vagrant Boxes for different network devices.  
 * [NX-OS](nx-os): Using Cisco's Nexus 9000v Image
 * [IOS XE](ios-xe): Using Cisco's CSR 1000v
-    * *Coming Soon*
 * [IOS-XR](ios-xr): Using Cisco's XRv
     * *Coming Soon*
 * [lab](lab): A short getting started lab for folks looking to get started with Vagrant for Network Programmability
