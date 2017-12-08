@@ -39,7 +39,7 @@
 
     - name: Setup SNMP Configuration
       ios_config:
-        provider:
+        provider: 
           host: "{{mgmt_ip}}"
           port: "{{ssh_port}}"
           username: "{{username}}"
