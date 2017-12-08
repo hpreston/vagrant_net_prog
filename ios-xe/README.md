@@ -7,4 +7,4 @@ For instructions on how to create a Vagrant box for the CSR 1000v see [box_build
 **Note:**  Keep in mind that each CSR 1000v you spin up will require CPU and Memory from your host machine.  
 
 * [basic](basic): This is what you get when you just `vagrant init`
-* [netprog_ready](netprog_ready): This is my default starting point for IOS XE Programmability work.  It deploys a single IOS XE router with 3 interfaces (1 Mangaement + 2 more), enables NETCONF/RESTCONF/YANG and Guest Shell features.  
+* [netprog_ready](netprog_ready): This is my default starting point for IOS XE Programmability work.  It deploys a single IOS XE router with 3 interfaces (1 Management + 2 more), enables NETCONF/RESTCONF/YANG and Guest Shell features.  
