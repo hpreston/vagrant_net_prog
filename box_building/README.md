@@ -97,7 +97,7 @@ The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial conf
     vagrant box add --name type/version path_to_box.box --force
     ```
 
-# Cisco CSR 1000v 
+# Cisco CSR 1000v
 
 Cisco does not publish a Vagrant box for the CSR 1000v, but as a virtual IOS XE platform, you can create a create a Vagrant box from the published ISO disk image available on CCO.  The instructions and scripts compiled in this repository pull heavily from resources available in [https://github.com/ios-xr/iosxrv-x64-vbox.git](https://github.com/ios-xr/iosxrv-x64-vbox.git)
 
@@ -111,14 +111,14 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     * *If there are multiple ISO images posted, and one includes `serial` in the title, download that one.*
 
     ![](readme_resources/csr_cco.png)
-    
+
 1. If you downloaded version 16.6 or 16.7, the ISO defaults to booting to a VGA input.  For automated script processing to create images, the VM needs to boot to a **Serial** input.  To change the default boot mode run the [`csr_iso_modify.sh`](csr_iso_modify.sh) (Linux) or [`csr_iso_modify_mac.sh`](csr_iso_modify_mac.sh) (Mac OS X).  This script will create a new `.iso` image prefixed with `serial-` that can be used in the following step.  
     * *Version 16.5 and 16.3 ISO defaulted to a Serial input already.*
-    * To run the script on Mac OS X, you'll need to install the Linux utility `mkisofs`.  You can do this with [Homebrew](http://brew.sh) with: `brew install mkisofs`.  
+    * To run the script on Mac OS X, you'll need to install the Linux utility `mkisofs`.  You can do this with [Homebrew](http://brew.sh) with: `brew install cdrtools`.  
 
     ```bash
     ./csr_iso_modify_mac.sh ~/Downloads/csr1000v-universalk9.16.07.01.iso
-    
+
     /var/folders/dh/t0frtgx514388l6ycj2bl7740000gn/T/tmp.qPqNs0TJ ~/coding/vagrant_net_prog/box_building
     /dev/disk4          	                               	/Volumes/CDROM
     Using CSR10000.PKG;1 for  /csr1000v-rpboot.16.07.01.SPA.pkg (csr1000v-mono-universalk9.16.07.01.SPA.pkg)
@@ -137,7 +137,7 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     Max brk space used 0
     203477 extents written (397 MB)    
     ```
-    
+
 1. Generate a Vagrant Box (VirtualBox) by calling the script and pointing it to the ISO image (likely the `serial-csr1000v-{version}.iso` you just created).  The script will provide feedback of each step and provide feedback for how to complete at the end.
 
     ```bash
@@ -147,7 +147,7 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     ==> Creating VirtualBox VM
     ==> Starting VM...
     ==> Failed to install VM disk image
-    
+
     ==> Successfully started to boot VM disk image
     ==> Waiting for IOS XE to boot (may take 3 minutes or so)
     ==> Logging into Vagrant Virtualbox and configuring IOS XE
@@ -166,13 +166,13 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     ==> Note:
     ==>   Both the XE SSH and NETCONF/RESTCONF username and password is vagrant/vagrant
     ```
-    
+
 1. Add the newly created box to your local Vagrant inventory. **The script ends with the exact command to use based on your machine, but here is an example for reference.**
 
     ```bash
     vagrant box add --name type/version path_to_box.box --force
     ```
-    
+
 # Using Your New Box!
 
 With your new box created, you can now get started using it in your own projects.  
@@ -221,4 +221,3 @@ With your new box created, you can now get started using it in your own projects
     ***************************************************************************
     n9kv1#    
     ```
-    
