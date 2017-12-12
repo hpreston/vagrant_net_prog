@@ -1,10 +1,11 @@
 ---
 mgmt_ip: 127.0.0.1
+netconf_ip: 127.0.0.1
 netconf_port: 2223
 ssh_port: 2222
 username: vagrant
 password: vagrant
-interfaces: 
+interfaces:
   - interface_type: GigabitEthernet
     interface_id: 2
     description: Link 2 - Configured by Ansible with Vagrant
@@ -14,4 +15,4 @@ interfaces:
     interface_id: 3
     description: Link 3 - Configured by Ansible with Vagrant
     ip_address: 192.168.101.20
-    subnet_mask: 255.255.255.0    
+    subnet_mask: 255.255.255.0

@@ -9,14 +9,14 @@ Vagrant.configure("2") do |config|
 
 
     # Deploy Multiple Nodes in a single Vagrantfile
-    
+
     # Node 1: IOS XE Device
     config.vm.define "iosxe1" do |node|
-        node.vm.box =  "iosxe/16.6.1"
+        node.vm.box =  "iosxe/16.06.02"
         config.ssh.insert_key = false
 
         # Gig2 connected to link1
-        # Gig3 connected to link2 
+        # Gig3 connected to link2
         # auto-config not supported.
         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
         node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
@@ -24,11 +24,11 @@ Vagrant.configure("2") do |config|
 
     # Node 2: IOS XE Device
     config.vm.define "iosxe2" do |node|
-        node.vm.box =  "iosxe/16.6.1"
+        node.vm.box =  "iosxe/16.06.02"
         config.ssh.insert_key = false
 
         # Gig2 connected to link1
-        # Gig3 connected to link2 
+        # Gig3 connected to link2
         # auto-config not supported.
         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
         node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
@@ -38,24 +38,24 @@ Vagrant.configure("2") do |config|
 #     config.vm.define "iosxr" do |node|
 #         node.vm.box =  "iosxr/6.1.2"
 #         config.ssh.insert_key = false
-# 
-#         # Interface 1 connected to link1, 
+#
+#         # Interface 1 connected to link1,
 #         # auto-config not supported.
 #         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
 #     end
 
 #     # Node 4: NX-OS Device
 #     config.vm.define "nxos1" do |node|
-#         node.vm.box =  "nxos/n9kv.7.0.3.I6.1"
+#         node.vm.box =  "nxos/7.0.3.I7.2"
 #         config.ssh.insert_key = false
-#         
+#
 #         # n9000v defaults to 8G RAM, but only needs 4G
 #         config.vm.provider "virtualbox" do |vb|
 #           # Customize the amount of memory on the VM:
 #           vb.memory = "4096"
 #         end
-# 
-#         # eth1/0/1 connected to link2, 
+#
+#         # eth1/0/1 connected to link2,
 #         # auto-config not supported.
 #         node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
 #     end
