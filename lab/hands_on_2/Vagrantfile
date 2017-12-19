@@ -16,10 +16,10 @@ Vagrant.configure("2") do |config|
         config.ssh.insert_key = false
 
         # Gig2 connected to link1
-        # Gig3 connected to link2
+        # Gig3 connected to hosts1
         # auto-config not supported.
         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
-        node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
+        node.vm.network :private_network, virtualbox__intnet: "hosts1", auto_config: false
     end
 
     # Node 2: IOS XE Device
@@ -28,10 +28,10 @@ Vagrant.configure("2") do |config|
         config.ssh.insert_key = false
 
         # Gig2 connected to link1
-        # Gig3 connected to link2
+        # Gig3 connected to hosts2
         # auto-config not supported.
         node.vm.network :private_network, virtualbox__intnet: "link1", auto_config: false
-        node.vm.network :private_network, virtualbox__intnet: "link2", auto_config: false
+        node.vm.network :private_network, virtualbox__intnet: "hosts2", auto_config: false
     end
 
 #     # Node 3: IOS XR Device
