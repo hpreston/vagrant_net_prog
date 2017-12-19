@@ -13,7 +13,6 @@ Vagrant.configure("2") do |config|
     # Node 1: IOS XE Device
     config.vm.define "iosxe1" do |node|
         node.vm.box =  "iosxe/16.06.02"
-        config.ssh.insert_key = false
 
         # Gig2 connected to link1
         # Gig3 connected to hosts1
@@ -25,7 +24,6 @@ Vagrant.configure("2") do |config|
     # Node 2: IOS XE Device
     config.vm.define "iosxe2" do |node|
         node.vm.box =  "iosxe/16.06.02"
-        config.ssh.insert_key = false
 
         # Gig2 connected to link1
         # Gig3 connected to hosts2
@@ -37,7 +35,6 @@ Vagrant.configure("2") do |config|
 #     # Node 3: IOS XR Device
 #     config.vm.define "iosxr" do |node|
 #         node.vm.box =  "iosxr/6.1.2"
-#         config.ssh.insert_key = false
 #
 #         # Interface 1 connected to link1,
 #         # auto-config not supported.
@@ -47,7 +44,6 @@ Vagrant.configure("2") do |config|
 #     # Node 4: NX-OS Device
 #     config.vm.define "nxos1" do |node|
 #         node.vm.box =  "nxos/7.0.3.I7.2"
-#         config.ssh.insert_key = false
 #
 #         # n9000v defaults to 8G RAM, but only needs 4G
 #         config.vm.provider "virtualbox" do |vb|
