@@ -16,7 +16,7 @@
   tasks:
     - name: Pause to complete boot
       pause:
-        seconds: 5
+        seconds: 10
 
     - name: Configure NETCONF and RESTCONF
       ios_config:
