@@ -14,6 +14,9 @@ new box that has been bootstrapped for use with Vagrant.
 Tested with nxosv-final.7.0.3.I7.1.box
             nxosv-final.7.0.3.I6.1.box
 
+  * Note: nxosv-final.7.0.3.I7.3.box (and later) boxes posted to CCO do not need
+    this script to complete the setup for Vagrant.
+
 Pre-installed requirements:
 python-pexpect
 vagrant

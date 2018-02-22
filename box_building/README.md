@@ -43,7 +43,9 @@ These utilities are perpetually in development/beta and currently are being buil
 
 # Cisco Nexus 9000v
 
-Cisco publishes a Vagrant Box for the Nexus 9000v on CCO for each release, however the published box provides an unconfigured switch that boots expecting initial configuraiton processes to continue.  Instructions for manually completing the configuration is available on [Cisco DevNet](https://developer.cisco.com/site/nx-os/docs/guides/developer-tooling/index.gsp).  
+Cisco publishes a Vagrant Box for the Nexus 9000v on CCO for each release, however the published box provides an unconfigured switch that boots expecting initial configuration processes to continue.  Instructions for manually completing the configuration is available on [Cisco DevNet](https://developer.cisco.com/site/nx-os/docs/guides/developer-tooling/index.gsp).  
+
+> Note: The boxes posted to CCO for Open NX-OS 7.0(3)I7(3) or later, are ready to use immediately after download and do **not** require that you run this customization script to make it ready.  In this case, you can simply add the downloaded box to your inventory immediately with a command such as `vagrant box add nxos/7.0.3.I7.3 ~/Downloads/nxosv-final.7.0.3.I7.3.box --force`.
 
 The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial configuration of the 9000v, deploys a basic configuration for management and API access, and adds the typical Vagrant user account and SSH key making it ready for usage for developers.  
 
