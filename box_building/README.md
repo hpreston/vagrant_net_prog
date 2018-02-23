@@ -39,7 +39,7 @@ These utilities are perpetually in development/beta and currently are being buil
 
 * [Cisco Nexus 9000v](#cisco-nexus-9000v) - Running the same Open NX-OS available on Nexus 9000 and 3000 platforms, the 9000v is a great platform for building and testing scripts and code for data center automation.
 * [Cisco CSR 1000v](#cisco-csr-1000v) - The CSR runs IOS XE, just like Cisco's Catalyst Switches and many routing platforms (such as ISR, ASR 1K, etc), and is a great platform for experimenting with features like Model Driven Programmability, Day Zero Technologies and Application Hosting.
-* Cisco IOS XRv *(Coming Soon)* - Running the same IOS XR code available on NCS and ASR 9K platforms, the XRv enables developers a resource for automating service provider networks.  
+* [Cisco IOS XRv](#cisco-ios-xrv) - Running the same IOS XR code available on NCS and ASR 9K platforms, the XRv enables developers a resource for automating service provider networks.  
 
 # Cisco Nexus 9000v
 
@@ -174,6 +174,13 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     ```bash
     vagrant box add --name type/version path_to_box.box --force
     ```
+
+# Cisco IOS XRv 
+The IOS XR BU has an ongoing public beta for folks interested in the IOS XR with Vagrant.  The steps to participate are: 
+
+1. Request access to the beta at [this site](https://xrdocs.github.io/getting-started/iosxr-vagrant-beta).
+1. Generate an API-KEY to download the box with [these instructions](https://xrdocs.github.io/getting-started/steps-download-iosxr-vagrant).    
+1. Follow the quickstart guide [here](https://xrdocs.github.io/application-hosting/tutorials/iosxr-vagrant-quickstart).  
 
 # Using Your New Box!
 
