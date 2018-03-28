@@ -43,19 +43,19 @@ These utilities are perpetually in development/beta and currently are being buil
 
 # Cisco Nexus 9000v
 
-Cisco publishes a Vagrant Box for the Nexus 9000v on CCO for each release, however the published box provides an unconfigured switch that boots expecting initial configuration processes to continue.  Instructions for manually completing the configuration is available on [Cisco DevNet](https://developer.cisco.com/site/nx-os/docs/guides/developer-tooling/index.gsp).  
+Cisco publishes a Vagrant Box for the Nexus 9000v on CCO for each release, however until the 7.0(3)I7(3) release (on February 12, 2018) the published boxes provided an unconfigured switch that boots expecting initial configuration processes to continue.  Instructions for manually completing the configuration is available on [Cisco DevNet](https://developer.cisco.com/site/nx-os/docs/guides/developer-tooling/index.gsp).  
 
 > Note: The boxes posted to CCO for Open NX-OS 7.0(3)I7(3) or later, are ready to use immediately after download and do **not** require that you run this customization script to make it ready.  In this case, you can simply add the downloaded box to your inventory immediately with a command such as `vagrant box add nxos/7.0.3.I7.3 ~/Downloads/nxosv-final.7.0.3.I7.3.box --force`.
 
-The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial configuration of the 9000v, deploys a basic configuration for management and API access, and adds the typical Vagrant user account and SSH key making it ready for usage for developers.  
+The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial configuration of pre-7.0(3)I7(3) 9000v boxes versions , deploys a basic configuration for management and API access, and adds the typical Vagrant user account and SSH key making it ready for usage for developers.  
 
 ## Building a Nexus 9000v Box
 
-1. Download the source Nexus 9000v Vagrant Box from [Cisco.com](https://software.cisco.com/portal/pub/download/portal/select.html?&mdfid=286312239&softwareid=282088129).  You will need to have an account with Cisco, but no specific entitlement is requried to download the software.  
+1. Download the source Nexus 9000v Vagrant Box from [Cisco.com](https://software.cisco.com/portal/pub/download/portal/select.html?&mdfid=286312239&softwareid=282088129).  You will need to have an account with Cisco, but no specific entitlement is required to download the software.  
 
     ![](readme_resources/n9kv_cco.png)
 
-1. Generate the configured Vagrant Box (VirtualBox) by calling the script and pointing it to the downloaded source box you downloaded.  The script will provide feedback of each step and provide feedback for how to complete at the end.  
+1. Only for versions pre-7.0(3)I7(3), generate the configured Vagrant Box (VirtualBox) by calling the script and pointing it to the downloaded source box you downloaded.  The script will provide feedback of each step and provide feedback for how to complete at the end.  
 
     ```bash
     python nxosv_vbox_prep.py ~/Downloads/nxosv-final.7.0.3.I6.1.box
@@ -175,8 +175,8 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     vagrant box add --name type/version path_to_box.box --force
     ```
 
-# Cisco IOS XRv 
-The IOS XR BU has an ongoing public beta for folks interested in the IOS XR with Vagrant.  The steps to participate are: 
+# Cisco IOS XRv
+The IOS XR BU has an ongoing public beta for folks interested in the IOS XR with Vagrant.  The steps to participate are:
 
 1. Request access to the beta at [this site](https://xrdocs.github.io/getting-started/iosxr-vagrant-beta).
 1. Generate an API-KEY to download the box with [these instructions](https://xrdocs.github.io/getting-started/steps-download-iosxr-vagrant).    
