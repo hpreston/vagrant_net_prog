@@ -55,7 +55,14 @@ The [`nxosv_vbox_prep.py`](nxosv_vbox_prep.py) script completes the initial conf
 
     ![](readme_resources/n9kv_cco.png)
 
-1. Only for versions pre-7.0(3)I7(3), generate the configured Vagrant Box (VirtualBox) by calling the script and pointing it to the downloaded source box you downloaded.  The script will provide feedback of each step and provide feedback for how to complete at the end.  
+1. Make sure you are in the `vagrant_net_prog/box_building` directory.
+
+    ```bash
+    $ pwd
+    /Users/hapresto/code/vagrant_net_prog/box_building
+    ```
+
+1. ***Only for versions pre-7.0(3)I7(3)***, generate the configured Vagrant Box (VirtualBox) by calling the script and pointing it to the downloaded source box you downloaded.  The script will provide feedback of each step and provide feedback for how to complete at the end.  
 
     ```bash
     python nxosv_vbox_prep.py ~/Downloads/nxosv-final.7.0.3.I6.1.box
@@ -113,6 +120,13 @@ The [`iosxe_iso2vbox.py`](iosxe_iso2vbox.py) script automates the creation of a 
     * *If there are multiple ISO images posted, and one includes `serial` in the title, download that one.*
 
     ![](readme_resources/csr_cco.png)
+
+1. Make sure you are in the `vagrant_net_prog/box_building` directory.
+
+    ```bash
+    $ pwd
+    /Users/hapresto/code/vagrant_net_prog/box_building
+    ```
 
 1. If you downloaded version 16.6 or 16.7, the ISO defaults to booting to a VGA input.  For automated script processing to create images, the VM needs to boot to a **Serial** input.  To change the default boot mode run the [`csr_iso_modify.sh`](csr_iso_modify.sh) (Linux) or [`csr_iso_modify_mac.sh`](csr_iso_modify_mac.sh) (Mac OS X).  This script will create a new `.iso` image prefixed with `serial-` that can be used in the following step.  
     * *Version 16.5 and 16.3 ISO defaulted to a Serial input already.*
