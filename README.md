@@ -1,3 +1,5 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/hpreston/vagrant_net_prog)
+
 # Vagrant for Network Programmability
 
 This is an repository with some samples and details on leveraging Vagrant for Network Programmability Development.  I'll be posting sample Vagrantfiles for different topologies as I pull them together, utilities for Vagrant box customization, and lab details and exercises.  
@@ -11,4 +13,3 @@ This is an repository with some samples and details on leveraging Vagrant for Ne
     * *Coming Soon*
 * [lab](lab): A short getting started lab for folks looking to get started with Vagrant for Network Programmability
     * *In Development*
-    
