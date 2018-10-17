@@ -11,5 +11,4 @@ This is an repository with some samples and details on leveraging Vagrant for Ne
 * [IOS XE](ios-xe): Using Cisco's CSR 1000v
 * [IOS-XR](ios-xr): Using Cisco's XRv
     * *Coming Soon*
-* [lab](lab): A short getting started lab for folks looking to get started with Vagrant for Network Programmability
-    * *In Development*
+* [lab](https://learninglabs.cisco.com/modules/vagrant_up): A DevNet Learning Lab for folks looking to get started with Vagrant for Network Programmability
