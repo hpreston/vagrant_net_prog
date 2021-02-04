@@ -39,16 +39,16 @@ mkdir mkdir iso
 hdiutil mount $SRC
 
 # Copy SRC ISO Content to Destination
-cp -a /Volumes/CDROM/* iso
+cp -a /Volumes/ISOIMAGE/* iso
 
 # Updating Grub to Boot Serial by default
-sed -i '.bak' '/^default/s/0/1/' iso/boot/grub/menu.lst
+sed -i '.bak' '/^default/s/0/1/' iso/boot/grub/grub.cfg
 
 # Create new ISO
-mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o "serial-$(basename $1)" iso
+mkisofs -R -b boot/grub/grub.cfg -no-emul-boot -boot-load-size 4 -boot-info-table -o "serial-$(basename $1)" iso
 
 # Unmount SRC ISO
-hdiutil unmount /Volumes/CDROM
+hdiutil unmount /Volumes/ISOIMAGE
 
 # Move created ISO to original directory
 mv *.iso $PDIR
